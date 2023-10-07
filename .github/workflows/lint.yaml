@@ -21,10 +21,10 @@ jobs:
       - name: poetry install
         run: poetry install
       - name: black
-        run: poetry run black --check --verbose fastconfig/ tests/
+        run: poetry run black --check --verbose mdpd/ tests/
       - name: ruff
-        run: poetry run ruff check --exit-non-zero-on-fix fastconfig/ tests/
+        run: poetry run ruff check --exit-non-zero-on-fix mdpd/ tests/
       - name: isort
-        run: poetry run isort --check-only fastconfig/ tests/
+        run: poetry run isort --check-only mdpd/ tests/
       - name: pytest
         run: poetry run pytest
