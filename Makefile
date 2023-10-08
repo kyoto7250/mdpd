@@ -4,4 +4,4 @@ style:
 	poetry run ruff  mdpd/ tests/
 
 test:
-	poetry run  pytest
+	poetry run pytest --doctest-modules
