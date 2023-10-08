@@ -5,3 +5,6 @@ style:
 
 test:
 	poetry run pytest --doctest-modules
+
+build:
+	poetry build
