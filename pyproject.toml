@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "mdpd"
 version = "0.1.0"
-description = ""
+description = "a simpler tool for convert markdown table to pandas"
 authors = ["kyoto7250 <50972773+kyoto7250@users.noreply.github.com>"]
 readme = "README.md"
+homepage = "https://github.com/kyoto7250/mdpd"
+repository = "https://github.com/kyoto7250/mdpd"
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
