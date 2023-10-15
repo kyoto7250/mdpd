@@ -6,6 +6,7 @@ authors = ["kyoto7250 <50972773+kyoto7250@users.noreply.github.com>"]
 readme = "README.md"
 homepage = "https://github.com/kyoto7250/mdpd"
 repository = "https://github.com/kyoto7250/mdpd"
+keywords = ["padnas", "markdown", "table", "test", "development"]
 
 
 [tool.poetry.dependencies]
