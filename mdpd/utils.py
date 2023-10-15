@@ -46,12 +46,23 @@ def _extract_line(line: str, possible_separator):
     return extracted, False
 
 
-def from_md(table: str):
-    exist_header = False
+def from_md(table: str, header=None):
+    """
+
+    Args:
+        table (str): a markdown table
+        header (list, optional): a header of the columns
+
+    Returns:
+        pd.DataFrame
+    """
+    exist_header = header is not None
     rows = []
     for line in table.split("\n"):
         extracted, is_header = _extract_line(line.strip(), len(rows) == 1)
         if is_header:
+            if header is not None:
+                continue
             exist_header = True
 
         if extracted == []:
@@ -60,5 +71,6 @@ def from_md(table: str):
         rows.append(extracted)
 
     if exist_header:
-        return pd.DataFrame(rows[1:], columns=rows[0])
+        columns = rows[0] if header is None else header
+        return pd.DataFrame(rows[1:], columns=columns)
     return pd.DataFrame(rows)

@@ -128,3 +128,40 @@ class TestUtils(unittest.TestCase):
         assert (
             (df == pd.read_csv("tests/fixtures/one_column_header_only.csv")).all().all()
         )
+
+    def test_no_header_from_md(self):
+        df = utils.from_md(
+            """
+            | Syntax    | Description |
+            """
+        )
+        assert (
+            (df == pd.read_csv("tests/fixtures/header_only.csv", header=None))
+            .all()
+            .all()
+        )
+
+        df = utils.from_md(
+            """
+            | Syntax    | Description |
+            | Header    | Title       |
+            | Paragraph | Text        |
+            """
+        )
+        assert (
+            (df == pd.read_csv("tests/fixtures/simple_pattern.csv", header=None))
+            .all()
+            .all()
+        )
+
+    def test_with_header_from_md(self):
+        df = utils.from_md(
+            """
+            | Column 1  | Column 2    |
+            | --------- | ----------- |
+            | Header    | Title       |
+            | Paragraph | Text        |
+            """,
+            header=["Syntax", "Description"],
+        )
+        assert (df == pd.read_csv("tests/fixtures/simple_pattern.csv")).all().all()
