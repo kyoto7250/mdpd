@@ -27,4 +27,4 @@ jobs:
       - name: isort
         run: poetry run isort --check-only mdpd/ tests/
       - name: pytest
-        run: poetry run pytest
+        run: poetry run pytest --doctest-modules
