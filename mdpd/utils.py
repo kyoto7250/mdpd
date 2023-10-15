@@ -56,21 +56,18 @@ def from_md(table: str, header=None):
     Returns:
         pd.DataFrame
     """
-    exist_header = header is not None
     rows = []
     for line in table.split("\n"):
         extracted, is_header = _extract_line(line.strip(), len(rows) == 1)
         if is_header:
-            if header is not None:
-                continue
-            exist_header = True
+            if header is None:
+                header = rows[0]
+            rows.pop(0)
+            continue
 
         if extracted == []:
             continue
 
         rows.append(extracted)
 
-    if exist_header:
-        columns = rows[0] if header is None else header
-        return pd.DataFrame(rows[1:], columns=columns)
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=header)
