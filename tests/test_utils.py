@@ -154,6 +154,15 @@ class TestUtils(unittest.TestCase):
             .all()
         )
 
+        df = utils.from_md(
+            """
+            | Header    | Title       |
+            | Paragraph | Text        |
+            """,
+            header=["Syntax", "Description"],
+        )
+        assert (df == pd.read_csv("tests/fixtures/simple_pattern.csv")).all().all()
+
     def test_with_header_from_md(self):
         df = utils.from_md(
             """
