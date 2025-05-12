@@ -174,3 +174,17 @@ class TestUtils(unittest.TestCase):
             header=["Syntax", "Description"],
         )
         assert (df == pd.read_csv("tests/fixtures/simple_pattern.csv")).all().all()
+
+    def test_convert_dtypes(self):
+        df = utils.from_md(
+            """
+            |   GrossInternalArea | BuildingType                          | ConstructionDeliveryType   | BuildingName   |
+            |--------------------:|:--------------------------------------|:---------------------------|:---------------|
+            |                  10 | Office - General                      | newbuild                   | A              |
+            |                  10 | Office - General                      | retrofit-in-one-go         | A              |
+            |                  20 | Commercial Resi - Student Residential | newbuild                   | B              |
+            |                  20 | Commercial Resi - Student Residential | retrofit-in-one-go         | B              |
+            """,
+            convert_dtypes=True,
+        )
+        assert pd.api.types.is_integer_dtype(df["GrossInternalArea"].dtype)
