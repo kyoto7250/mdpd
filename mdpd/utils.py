@@ -46,12 +46,13 @@ def _extract_line(line: str, possible_separator):
     return extracted, False
 
 
-def from_md(table: str, header=None):
+def from_md(table: str, header=None, convert_dtypes=True):
     """
 
     Args:
         table (str): a markdown table
         header (list, optional): a header of the columns
+        convert_dtypes (bool): convert dtypes when possible
 
     Returns:
         pd.DataFrame
@@ -70,4 +71,13 @@ def from_md(table: str, header=None):
 
         rows.append(extracted)
 
-    return pd.DataFrame(rows, columns=header)
+    if convert_dtypes:
+        df = pd.DataFrame(rows, columns=header).convert_dtypes()
+        for c in df.columns:
+            try:
+                df[c] = pd.to_numeric(df[c])
+            except Exception:
+                pass
+        return df
+    else:
+        return pd.DataFrame(rows, columns=header)
