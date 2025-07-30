@@ -59,7 +59,7 @@ def from_md(table: str, header=None, convert_dtypes=True):
     """
     rows = []
     for line in table.split("\n"):
-        extracted, is_header = _extract_line(line.strip(), len(rows) == 1)
+        extracted, is_header = _extract_line(line.strip(), len(rows) == 1 and not header)
         if is_header:
             if header is None:
                 header = rows[0]
