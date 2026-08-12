@@ -188,3 +188,69 @@ class TestUtils(unittest.TestCase):
             convert_dtypes=True,
         )
         assert pd.api.types.is_integer_dtype(df["GrossInternalArea"].dtype)
+
+    def test_single_line_with_separator_from_md(self):
+        """Single data row with a separator — the original bug scenario."""
+        df = utils.from_md(
+            """
+            | Syntax    | Description |
+            | --------- | ----------- |
+            | Header    | Title       |
+            """
+        )
+        assert list(df.columns) == ["Syntax", "Description"]
+        assert len(df) == 1
+        assert df.iloc[0]["Syntax"] == "Header"
+        assert df.iloc[0]["Description"] == "Title"
+
+    def test_single_line_with_provided_header_from_md(self):
+        """Single data row, no separator, header provided explicitly — should not treat row as separator."""
+        df = utils.from_md(
+            """
+            | Header    | Title       |
+            """,
+            header=["Syntax", "Description"],
+        )
+        assert list(df.columns) == ["Syntax", "Description"]
+        assert len(df) == 1
+        assert df.iloc[0]["Syntax"] == "Header"
+        assert df.iloc[0]["Description"] == "Title"
+
+    def test_single_line_with_separator_and_provided_header_from_md(self):
+        """Single data row with separator AND pre-supplied header — separator should be skipped."""
+        df = utils.from_md(
+            """
+            | Column 1  | Column 2 |
+            | --------- | -------- |
+            | foo       | bar      |
+            """,
+            header=["Syntax", "Description"],
+        )
+        assert list(df.columns) == ["Syntax", "Description"]
+        assert len(df) == 1
+        assert df.iloc[0]["Syntax"] == "foo"
+        assert df.iloc[0]["Description"] == "bar"
+
+    def test_single_column_single_line_from_md(self):
+        """Single column, single data row — edge case for the fix."""
+        df = utils.from_md(
+            """
+            | Syntax    |
+            | --------- |
+            | Header    |
+            """
+        )
+        assert list(df.columns) == ["Syntax"]
+        assert len(df) == 1
+        assert df.iloc[0]["Syntax"] == "Header"
+
+    def test_single_line_no_separator_from_md(self):
+        """Single data row without a separator row and no pre-supplied header."""
+        df = utils.from_md(
+            """
+            | Header    | Title       |
+            """
+        )
+        # No separator -> treated as headerless, one row of data
+        assert len(df) == 1
+        assert list(df.iloc[0]) == ["Header", "Title"]
